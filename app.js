@@ -1,5 +1,4 @@
 const yargs = require('yargs');
-const request = require('request');
 
 const geocode = require('./geocode/geocode.js');
 const forecastio = require('./forecast-io/forecast.js');
@@ -16,17 +15,11 @@ const argv = yargs
   .help()
   .argv;
 
-geocode.geocodeAddress(argv.address, (geocodeErrorMessage, geocodeResults) => {
-  if (geocodeErrorMessage)
-    console.log(geocodeErrorMessage);
-  else {
-    console.log(JSON.stringify(geocodeResults, undefined, 2));
-    forecastio.getCurrentWeather(geocodeResults.latitude, geocodeResults.longitude, (weatherErrorMessage, weatherResults) => {
-      if (weatherErrorMessage)
-        console.log(weatherErrorMessage);
-      else {
-        console.log(JSON.stringify(weatherResults, undefined, 2));
-      }
-    })
-  }
-});
+geocode.geocodeAddress(argv.address).then((location) => {
+  console.log(JSON.stringify(location, undefined, 2));
+  return forecastio.getCurrentWeather(location.latitude, location.longitude);
+}).then((weather) => {
+  console.log(JSON.stringify(weather, undefined, 2));
+}).catch((errorMessage) => {
+  console.log(errorMessage);
+})
