@@ -12,7 +12,7 @@ A very short app created while learning the basics of Node. The application make
     ```shell
     npm install
     ```
-* Step 4 - Use the below command to add a note:
+* Step 4 - Use the below command to see weather summary at The Gateway of India:
 
     ```shell
     node app.js --address="Gateway of india"
