@@ -6,7 +6,6 @@ const forecastio = require('./forecast-io/forecast.js');
 const argv = yargs
   .options({
     address: {
-      demand: true,
       alias: 'a',
       describe: 'Address to fetch weather for.',
       string: true
@@ -14,8 +13,9 @@ const argv = yargs
   })
   .help()
   .argv;
+const defaultAddress = 'DeltaX Bengaluru';
 
-geocode.geocodeAddress(argv.address).then((location) => {
+geocode.geocodeAddress(argv.address || defaultAddress).then((location) => {
   console.log(JSON.stringify(location, undefined, 2));
   return forecastio.getCurrentWeather(location.latitude, location.longitude);
 }).then((weather) => {
